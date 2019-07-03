@@ -1,0 +1,355 @@
+/* 
+ * File:   ResTableConfig.h
+ * Author : angelToms
+ *
+ */
+
+#ifndef RESTABLECONFIG_H
+#define	RESTABLECONFIG_H
+
+#include "../ByteOrder.h"
+#include "../utils/String8.h"
+
+enum {
+    ACONFIGURATION_ORIENTATION_ANY  = 0x0000,
+    ACONFIGURATION_ORIENTATION_PORT = 0x0001,
+    ACONFIGURATION_ORIENTATION_LAND = 0x0002,
+    ACONFIGURATION_ORIENTATION_SQUARE = 0x0003,
+
+    ACONFIGURATION_TOUCHSCREEN_ANY  = 0x0000,
+    ACONFIGURATION_TOUCHSCREEN_NOTOUCH  = 0x0001,
+    ACONFIGURATION_TOUCHSCREEN_STYLUS  = 0x0002,
+    ACONFIGURATION_TOUCHSCREEN_FINGER  = 0x0003,
+
+    ACONFIGURATION_DENSITY_DEFAULT = 0,
+    ACONFIGURATION_DENSITY_LOW = 120,
+    ACONFIGURATION_DENSITY_MEDIUM = 160,
+    ACONFIGURATION_DENSITY_TV = 213,
+    ACONFIGURATION_DENSITY_HIGH = 240,
+    ACONFIGURATION_DENSITY_XHIGH = 320,
+    ACONFIGURATION_DENSITY_XXHIGH = 480,
+    ACONFIGURATION_DENSITY_XXXHIGH = 640,
+    ACONFIGURATION_DENSITY_NONE = 0xffff,
+
+    ACONFIGURATION_KEYBOARD_ANY  = 0x0000,
+    ACONFIGURATION_KEYBOARD_NOKEYS  = 0x0001,
+    ACONFIGURATION_KEYBOARD_QWERTY  = 0x0002,
+    ACONFIGURATION_KEYBOARD_12KEY  = 0x0003,
+
+    ACONFIGURATION_NAVIGATION_ANY  = 0x0000,
+    ACONFIGURATION_NAVIGATION_NONAV  = 0x0001,
+    ACONFIGURATION_NAVIGATION_DPAD  = 0x0002,
+    ACONFIGURATION_NAVIGATION_TRACKBALL  = 0x0003,
+    ACONFIGURATION_NAVIGATION_WHEEL  = 0x0004,
+
+    ACONFIGURATION_KEYSHIDDEN_ANY = 0x0000,
+    ACONFIGURATION_KEYSHIDDEN_NO = 0x0001,
+    ACONFIGURATION_KEYSHIDDEN_YES = 0x0002,
+    ACONFIGURATION_KEYSHIDDEN_SOFT = 0x0003,
+
+    ACONFIGURATION_NAVHIDDEN_ANY = 0x0000,
+    ACONFIGURATION_NAVHIDDEN_NO = 0x0001,
+    ACONFIGURATION_NAVHIDDEN_YES = 0x0002,
+
+    ACONFIGURATION_SCREENSIZE_ANY  = 0x00,
+    ACONFIGURATION_SCREENSIZE_SMALL = 0x01,
+    ACONFIGURATION_SCREENSIZE_NORMAL = 0x02,
+    ACONFIGURATION_SCREENSIZE_LARGE = 0x03,
+    ACONFIGURATION_SCREENSIZE_XLARGE = 0x04,
+
+    ACONFIGURATION_SCREENLONG_ANY = 0x00,
+    ACONFIGURATION_SCREENLONG_NO = 0x1,
+    ACONFIGURATION_SCREENLONG_YES = 0x2,
+
+    ACONFIGURATION_UI_MODE_TYPE_ANY = 0x00,
+    ACONFIGURATION_UI_MODE_TYPE_NORMAL = 0x01,
+    ACONFIGURATION_UI_MODE_TYPE_DESK = 0x02,
+    ACONFIGURATION_UI_MODE_TYPE_CAR = 0x03,
+    ACONFIGURATION_UI_MODE_TYPE_TELEVISION = 0x04,
+    ACONFIGURATION_UI_MODE_TYPE_APPLIANCE = 0x05,
+
+    ACONFIGURATION_UI_MODE_NIGHT_ANY = 0x00,
+    ACONFIGURATION_UI_MODE_NIGHT_NO = 0x1,
+    ACONFIGURATION_UI_MODE_NIGHT_YES = 0x2,
+
+    ACONFIGURATION_SCREEN_WIDTH_DP_ANY = 0x0000,
+
+    ACONFIGURATION_SCREEN_HEIGHT_DP_ANY = 0x0000,
+
+    ACONFIGURATION_SMALLEST_SCREEN_WIDTH_DP_ANY = 0x0000,
+
+    ACONFIGURATION_LAYOUTDIR_ANY  = 0x00,
+    ACONFIGURATION_LAYOUTDIR_LTR  = 0x01,
+    ACONFIGURATION_LAYOUTDIR_RTL  = 0x02,
+
+    ACONFIGURATION_MCC = 0x0001,
+    ACONFIGURATION_MNC = 0x0002,
+    ACONFIGURATION_LOCALE = 0x0004,
+    ACONFIGURATION_TOUCHSCREEN = 0x0008,
+    ACONFIGURATION_KEYBOARD = 0x0010,
+    ACONFIGURATION_KEYBOARD_HIDDEN = 0x0020,
+    ACONFIGURATION_NAVIGATION = 0x0040,
+    ACONFIGURATION_ORIENTATION = 0x0080,
+    ACONFIGURATION_DENSITY = 0x0100,
+    ACONFIGURATION_SCREEN_SIZE = 0x0200,
+    ACONFIGURATION_VERSION = 0x0400,
+    ACONFIGURATION_SCREEN_LAYOUT = 0x0800,
+    ACONFIGURATION_UI_MODE = 0x1000,
+    ACONFIGURATION_SMALLEST_SCREEN_SIZE = 0x2000,
+    ACONFIGURATION_LAYOUTDIR = 0x4000,
+
+    ACONFIGURATION_MNC_ZERO = 0xffff,
+};
+
+enum {
+    ORIENTATION_ANY  = ACONFIGURATION_ORIENTATION_ANY,
+    ORIENTATION_PORT = ACONFIGURATION_ORIENTATION_PORT,
+    ORIENTATION_LAND = ACONFIGURATION_ORIENTATION_LAND,
+    ORIENTATION_SQUARE = ACONFIGURATION_ORIENTATION_SQUARE,
+};
+
+enum {
+    TOUCHSCREEN_ANY  = ACONFIGURATION_TOUCHSCREEN_ANY,
+    TOUCHSCREEN_NOTOUCH  = ACONFIGURATION_TOUCHSCREEN_NOTOUCH,
+    TOUCHSCREEN_STYLUS  = ACONFIGURATION_TOUCHSCREEN_STYLUS,
+    TOUCHSCREEN_FINGER  = ACONFIGURATION_TOUCHSCREEN_FINGER,
+};
+
+enum {
+    DENSITY_DEFAULT = ACONFIGURATION_DENSITY_DEFAULT,
+    DENSITY_LOW = ACONFIGURATION_DENSITY_LOW,
+    DENSITY_MEDIUM = ACONFIGURATION_DENSITY_MEDIUM,
+    DENSITY_TV = ACONFIGURATION_DENSITY_TV,
+    DENSITY_HIGH = ACONFIGURATION_DENSITY_HIGH,
+    DENSITY_XHIGH = ACONFIGURATION_DENSITY_XHIGH,
+    DENSITY_XXHIGH = ACONFIGURATION_DENSITY_XXHIGH,
+    DENSITY_XXXHIGH = ACONFIGURATION_DENSITY_XXXHIGH,
+    DENSITY_NONE = ACONFIGURATION_DENSITY_NONE
+};
+
+    enum {
+        KEYBOARD_ANY  = ACONFIGURATION_KEYBOARD_ANY,
+        KEYBOARD_NOKEYS  = ACONFIGURATION_KEYBOARD_NOKEYS,
+        KEYBOARD_QWERTY  = ACONFIGURATION_KEYBOARD_QWERTY,
+        KEYBOARD_12KEY  = ACONFIGURATION_KEYBOARD_12KEY,
+    };
+    
+enum {
+    NAVIGATION_ANY  = ACONFIGURATION_NAVIGATION_ANY,
+    NAVIGATION_NONAV  = ACONFIGURATION_NAVIGATION_NONAV,
+    NAVIGATION_DPAD  = ACONFIGURATION_NAVIGATION_DPAD,
+    NAVIGATION_TRACKBALL  = ACONFIGURATION_NAVIGATION_TRACKBALL,
+    NAVIGATION_WHEEL  = ACONFIGURATION_NAVIGATION_WHEEL,
+};
+
+enum {
+    MASK_KEYSHIDDEN = 0x0003,
+    KEYSHIDDEN_ANY = ACONFIGURATION_KEYSHIDDEN_ANY,
+    KEYSHIDDEN_NO = ACONFIGURATION_KEYSHIDDEN_NO,
+    KEYSHIDDEN_YES = ACONFIGURATION_KEYSHIDDEN_YES,
+    KEYSHIDDEN_SOFT = ACONFIGURATION_KEYSHIDDEN_SOFT,
+};
+
+enum {
+    MASK_NAVHIDDEN = 0x000c,
+    SHIFT_NAVHIDDEN = 2,
+    NAVHIDDEN_ANY = ACONFIGURATION_NAVHIDDEN_ANY << SHIFT_NAVHIDDEN,
+    NAVHIDDEN_NO = ACONFIGURATION_NAVHIDDEN_NO << SHIFT_NAVHIDDEN,
+    NAVHIDDEN_YES = ACONFIGURATION_NAVHIDDEN_YES << SHIFT_NAVHIDDEN,
+};
+
+enum {
+    SCREENWIDTH_ANY = 0
+};
+
+enum {
+    SCREENHEIGHT_ANY = 0
+};
+
+enum {
+    SDKVERSION_ANY = 0
+};
+
+enum {
+    MINORVERSION_ANY = 0
+};
+
+enum {
+    // screenLayout bits for screen size class.
+    MASK_SCREENSIZE = 0x0f,
+    SCREENSIZE_ANY = ACONFIGURATION_SCREENSIZE_ANY,
+    SCREENSIZE_SMALL = ACONFIGURATION_SCREENSIZE_SMALL,
+    SCREENSIZE_NORMAL = ACONFIGURATION_SCREENSIZE_NORMAL,
+    SCREENSIZE_LARGE = ACONFIGURATION_SCREENSIZE_LARGE,
+    SCREENSIZE_XLARGE = ACONFIGURATION_SCREENSIZE_XLARGE,
+
+    // screenLayout bits for wide/long screen variation.
+    MASK_SCREENLONG = 0x30,
+    SHIFT_SCREENLONG = 4,
+    SCREENLONG_ANY = ACONFIGURATION_SCREENLONG_ANY << SHIFT_SCREENLONG,
+    SCREENLONG_NO = ACONFIGURATION_SCREENLONG_NO << SHIFT_SCREENLONG,
+    SCREENLONG_YES = ACONFIGURATION_SCREENLONG_YES << SHIFT_SCREENLONG,
+
+    // screenLayout bits for layout direction.
+    MASK_LAYOUTDIR = 0xC0,
+    SHIFT_LAYOUTDIR = 6,
+    LAYOUTDIR_ANY = ACONFIGURATION_LAYOUTDIR_ANY << SHIFT_LAYOUTDIR,
+    LAYOUTDIR_LTR = ACONFIGURATION_LAYOUTDIR_LTR << SHIFT_LAYOUTDIR,
+    LAYOUTDIR_RTL = ACONFIGURATION_LAYOUTDIR_RTL << SHIFT_LAYOUTDIR,
+};
+
+enum {
+    // uiMode bits for the mode type.
+    MASK_UI_MODE_TYPE = 0x0f,
+    UI_MODE_TYPE_ANY = ACONFIGURATION_UI_MODE_TYPE_ANY,
+    UI_MODE_TYPE_NORMAL = ACONFIGURATION_UI_MODE_TYPE_NORMAL,
+    UI_MODE_TYPE_DESK = ACONFIGURATION_UI_MODE_TYPE_DESK,
+    UI_MODE_TYPE_CAR = ACONFIGURATION_UI_MODE_TYPE_CAR,
+    UI_MODE_TYPE_TELEVISION = ACONFIGURATION_UI_MODE_TYPE_TELEVISION,
+    UI_MODE_TYPE_APPLIANCE = ACONFIGURATION_UI_MODE_TYPE_APPLIANCE,
+
+    // uiMode bits for the night switch.
+    MASK_UI_MODE_NIGHT = 0x30,
+    SHIFT_UI_MODE_NIGHT = 4,
+    UI_MODE_NIGHT_ANY = ACONFIGURATION_UI_MODE_NIGHT_ANY << SHIFT_UI_MODE_NIGHT,
+    UI_MODE_NIGHT_NO = ACONFIGURATION_UI_MODE_NIGHT_NO << SHIFT_UI_MODE_NIGHT,
+    UI_MODE_NIGHT_YES = ACONFIGURATION_UI_MODE_NIGHT_YES << SHIFT_UI_MODE_NIGHT,
+};
+
+// Flags indicating a set of config values.  These flag constants must
+// match the corresponding ones in android.content.pm.ActivityInfo and
+// attrs_manifest.xml.
+enum {
+    CONFIG_MCC = ACONFIGURATION_MCC,
+    CONFIG_MNC = ACONFIGURATION_MCC,
+    CONFIG_LOCALE = ACONFIGURATION_LOCALE,
+    CONFIG_TOUCHSCREEN = ACONFIGURATION_TOUCHSCREEN,
+    CONFIG_KEYBOARD = ACONFIGURATION_KEYBOARD,
+    CONFIG_KEYBOARD_HIDDEN = ACONFIGURATION_KEYBOARD_HIDDEN,
+    CONFIG_NAVIGATION = ACONFIGURATION_NAVIGATION,
+    CONFIG_ORIENTATION = ACONFIGURATION_ORIENTATION,
+    CONFIG_DENSITY = ACONFIGURATION_DENSITY,
+    CONFIG_SCREEN_SIZE = ACONFIGURATION_SCREEN_SIZE,
+    CONFIG_SMALLEST_SCREEN_SIZE = ACONFIGURATION_SMALLEST_SCREEN_SIZE,
+    CONFIG_VERSION = ACONFIGURATION_VERSION,
+    CONFIG_SCREEN_LAYOUT = ACONFIGURATION_SCREEN_LAYOUT,
+    CONFIG_UI_MODE = ACONFIGURATION_UI_MODE,
+    CONFIG_LAYOUTDIR = ACONFIGURATION_LAYOUTDIR,
+};
+
+/**
+ * Describes a particular resource configuration.
+ */
+struct ResTable_config
+{
+    // Number of bytes in this structure.
+    uint32_t size;
+    
+    union {
+        struct {
+            // Mobile country code (from SIM).  0 means "any".
+            uint16_t mcc;
+            // Mobile network code (from SIM).  0 means "any".
+            uint16_t mnc;
+        };
+        uint32_t imsi;
+    };
+    
+    union {
+        struct {
+            // \0\0 means "any".  Otherwise, en, fr, etc.
+            char language[2];
+            
+            // \0\0 means "any".  Otherwise, US, CA, etc.
+            char country[2];
+        };
+        uint32_t locale;
+    };
+    
+    union {
+        struct {
+            uint8_t orientation;
+            uint8_t touchscreen;
+            uint16_t density;
+        };
+        uint32_t screenType;
+    };
+    
+    union {
+        struct {
+            uint8_t keyboard;
+            uint8_t navigation;
+            uint8_t inputFlags;
+            uint8_t inputPad0;
+        };
+        uint32_t input;
+    };
+    
+    union {
+        struct {
+            uint16_t screenWidth;
+            uint16_t screenHeight;
+        };
+        uint32_t screenSize;
+    };
+    
+    union {
+        struct {
+            uint16_t sdkVersion;
+            // For now minorVersion must always be 0!!!  Its meaning
+            // is currently undefined.
+            uint16_t minorVersion;
+        };
+        uint32_t version;
+    };
+    
+    union {
+        struct {
+            uint8_t screenLayout;
+            uint8_t uiMode;
+            uint16_t smallestScreenWidthDp;
+        };
+        uint32_t screenConfig;
+    };
+    
+    union {
+        struct {
+            uint16_t screenWidthDp;
+            uint16_t screenHeightDp;
+        };
+        uint32_t screenSizeDp;
+    };
+};
+
+extern "C" {
+    
+__inline__ void copyFromDtoH(const ResTable_config& o, ResTable_config& n) {
+    n.size = sizeof(ResTable_config);
+    n.mcc = dtohs(o.mcc);
+    n.mnc = dtohs(o.mnc);
+    n.density = dtohs(o.density);
+    n.screenWidth = dtohs(o.screenWidth);
+    n.screenHeight = dtohs(o.screenHeight);
+    n.sdkVersion = dtohs(o.sdkVersion);
+    n.minorVersion = dtohs(o.minorVersion);
+    n.smallestScreenWidthDp = dtohs(o.smallestScreenWidthDp);
+    n.screenWidthDp = dtohs(o.screenWidthDp);
+    n.screenHeightDp = dtohs(o.screenHeightDp);
+}
+    
+}
+
+bool matchConfig(const ResTable_config& settings, ResTable_config& o);
+void getConfigLocale(char str[6], ResTable_config& o);
+String8 configToString(const ResTable_config& o);
+bool isMoreSpecificThan(const ResTable_config& o, 
+        const ResTable_config& t);
+bool isBetterThan(const ResTable_config& o,
+        const ResTable_config* requested,
+        const ResTable_config& t);
+String8 toString(const ResTable_config& t); 
+
+
+
+#endif	/* RESTABLECONFIG_H */
+

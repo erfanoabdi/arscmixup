@@ -1,0 +1,89 @@
+//@author : angelToms
+//此文件里面由不用类型的chunk组成
+
+//每种结构体内部都包含: ResChunk_header，
+//并且ResChunk_header在该结构的起始位置，
+//这样ResChunk_header就成了该结构体的头部，
+//ResChunk_header里面包含了标示该结构的
+//type-类型，headerSize-该结构大小
+//size 整个chunk大小
+
+//所以解析时，可以先去读取ResChunk_header
+//通过分析可以得到它的类型，长度。
+//紧挨着这个chunk尾部的是下一个结构的ResChunk_header
+//如：
+// ResChunk_header* header = (ResChunk_header*) data；
+// next chunk
+// ResChunk_header* _header = (const ResChunk_header*) (((const uint8_t*) header)
+//            + dtohs(header->size));
+
+struct ResChunk_header
+{
+    uint16_t type;
+    uint16_t headerSize;
+    uint32_t size;
+};
+
+||ResChunk_header
++---------------------------+
+|  type                     | 根据type的不同得到该Chunk类型
+|  headerSize               |          
+|  size                     |
++---------------------------+
+
+
+||ResTable
++---------------------------+-------------------------------------------------------------+
+|  ResTable_header          |   ResTable_header->size  为整个文件大小                     |
++---------------------------+-------------------------------------------------------------+
+|  ResStringPool_header     |  这块结构是ResStringPool                                    |
+|                           |                                                             |
++---------------------------+                                                             |
+|  String entry  [0-N]      | unsigned int[N] N = stringCount,偏移数组                    |
++---------------------------+                                                             |
+|  Style entry   [0-N]      | unsigned int[N] N = styleCount                              |
++---------------------------+                                                             |
+|  String pool  [1-N]       | ResStringPool_header + ResStringPool_header->stringsStart   |
++---------------------------+                                                             |
+|  Style pool   [1-N]       | ResStringPool_header + ResStringPool_header->styleStart     |
++---------------------------+-------------------------------------------------------------+           
+|  ResTable_package  [1-N]  | 这块结构是<ResTablePackage>结构，是元数据                   |  
+|                           | N = ResTable_header->packageCount                           |
++---------------------------+                                                             |
+|  Type strings  [1-N]      | 类型同ResStringPool, ResTable_package + typeString          |
++---------------------------+                                                             |
+|  Key  strings  [1-N]      | 类型同ResStringPool, ResTable_package + keyStrings          |
++---------------------------+---------------------------------------------------+         |
+| ResTable_typeSpec  id=1   | 我把这个结构称为<ResTableType>                    |         |
++---------------------------+                                                   |         |
+| typespec configs [1-N]    | unsigned int[N] N = ResTable_typeSpec->entryCount |         |
++---------------------------+                                                   |         |
+| ResTable_type [1-N] id=1  | id=1，但是可能有N个连续这样的结构                 |         |
++---------------------------+                                                   |         |
+| value entry [1-N]         | unsigned int[N] N = ResTable_type->entryCount     |         |
++---------------------------+----------------------------------------------+    |         |
+| +-----------------------+ | 我把这块结构称为<ResValue>                   |    |         |
+| | ResTable_entry 1      | |N = ResTable_type->entryCount                 |    |         |
+| +-----------------------+ | 这里的1代表下标是1                           |    |         |
+| | ResTable_map_entry 1  | | 如果ResTable_entry->flags&FLAG_COMPLEX为真   |    |         |
+| |                       | | 结构为ResTable_map_entry,                    |    |         |
+| +-----------------------+ | 则它后面紧跟着N个ResTable_map                |    |         | 
+| | ResTable_map [1-N]    | | N = ResTable_map_entry->count                |    |         |
+| |                       | | 否则ResTable_entry->flags = 0,               |    |         |
+| +-----------------------+ | 结构为1个Res_value                           |    |         |
+|          或者             |                                              |    |         |
+| +-----------------------+ |                                              |    |         |
+| | ResTable_entry 1      | |                                              |    |         |
+| +-----------------------+ | 一共N个，后面紧跟着                          |    |         |
+| |Res_value 1            | | N为上面ResTable_entry个数                    |    |         |
+| |                       | |                                              |    |         |
+| +-----------------------+ |                                              |    |         |
++---------------------------+----------------------------------------------+    |         |
+|      ......               |                                                   |         |
+| 连续N-1个<ResValue>       |                                                   |         |
+|      ......               |                                                   |         |
++---------------------------+---------------------------------------------------+         |
+|        ......             | 连续N-1个一样的<ResTableType>结构,                          |
+| 连续 N-1个<ResTableType>  | 但此结构都属于同一个<ResTablePackage>                       |
+|        ......             | id = 2 -- N                                                 |
++---------------------------+-------------------------------------------------------------+

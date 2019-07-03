@@ -1,0 +1,18 @@
+[*] -t, bin
+[*] -p, d:/tmp_test/sgsearch
+[*] -o, mixup
+usage :
+           arscmaker -t [python | bin] -p path -o [mixup | parse]
+           -t: type, -p: path, -o: operate
+           -t python:
+           use python zip tools
+           -t bin:
+               use system bin zip tools
+           path:
+               like /tmp/test/a.apk(mixup apk) or /tmp/test/(parse resources.arsc)
+           -o mixup:
+               mixup apk res and create a new apk, path must contain apk, like a.apk
+           -o parse:
+               only parse resources.arsc,if path contains apk, it will unzip and parse res, and remove it at last
+           ex:
+               arscmaker -t python -p /tmp/test/a.apk -o mixup
