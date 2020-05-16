@@ -108,7 +108,7 @@ static char* allocFromUTF8(const char* in, size_t len)
     return getEmptyString();
 }
 
-static char* allocFromUTF16(const char16_t* in, size_t len)
+static char* allocFromUTF16(const uint16_t* in, size_t len)
 {
     if (len == 0) return getEmptyString();
 
@@ -131,7 +131,7 @@ static char* allocFromUTF16(const char16_t* in, size_t len)
     return str;
 }
 
-static char* allocFromUTF32(const char32_t* in, size_t len)
+static char* allocFromUTF32(const uint32_t* in, size_t len)
 {
     if (len == 0) {
         return getEmptyString();
@@ -204,22 +204,22 @@ String8::String8(const String16& o)
 {
 }
 
-String8::String8(const char16_t* o)
+String8::String8(const uint16_t* o)
     : mString(allocFromUTF16(o, strlen16(o)))
 {
 }
 
-String8::String8(const char16_t* o, size_t len)
+String8::String8(const uint16_t* o, size_t len)
     : mString(allocFromUTF16(o, len))
 {
 }
 
-String8::String8(const char32_t* o)
+String8::String8(const uint32_t* o)
     : mString(allocFromUTF32(o, strlen32(o)))
 {
 }
 
-String8::String8(const char32_t* o, size_t len)
+String8::String8(const uint32_t* o, size_t len)
     : mString(allocFromUTF32(o, len))
 {
 }
@@ -281,7 +281,7 @@ status_t String8::setTo(const char* other, size_t len)
     return NO_MEMORY;
 }
 
-status_t String8::setTo(const char16_t* other, size_t len)
+status_t String8::setTo(const uint16_t* other, size_t len)
 {
     const char *newString = allocFromUTF16(other, len);
     SharedBuffer::bufferFromData(mString)->release();
@@ -292,7 +292,7 @@ status_t String8::setTo(const char16_t* other, size_t len)
     return NO_MEMORY;
 }
 
-status_t String8::setTo(const char32_t* other, size_t len)
+status_t String8::setTo(const uint32_t* other, size_t len)
 {
     const char *newString = allocFromUTF32(other, len);
     SharedBuffer::bufferFromData(mString)->release();
@@ -479,7 +479,7 @@ int32_t String8::getUtf32At(size_t index, size_t *next_index) const
     return utf32_from_utf8_at(mString, length(), index, next_index);
 }
 
-void String8::getUtf32(char32_t* dst) const
+void String8::getUtf32(uint32_t* dst) const
 {
     utf8_to_utf32(mString, length(), dst);
 }

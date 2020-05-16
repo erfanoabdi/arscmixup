@@ -53,48 +53,48 @@ public:
                                 String16(const String16& o,
                                          size_t len,
                                          size_t begin=0);
-    explicit                    String16(const char16_t* o);
-    explicit                    String16(const char16_t* o, size_t len);
+    explicit                    String16(const uint16_t* o);
+    explicit                    String16(const uint16_t* o, size_t len);
     explicit                    String16(const String8& o);
     explicit                    String16(const char* o);
     explicit                    String16(const char* o, size_t len);
 
                                 ~String16();
     
-    inline  const char16_t*     string() const;
+    inline  const uint16_t*     string() const;
     inline  size_t              size() const;
     
     inline  const SharedBuffer* sharedBuffer() const;
     
             void                setTo(const String16& other);
-            status_t            setTo(const char16_t* other);
-            status_t            setTo(const char16_t* other, size_t len);
+            status_t            setTo(const uint16_t* other);
+            status_t            setTo(const uint16_t* other, size_t len);
             status_t            setTo(const String16& other,
                                       size_t len,
                                       size_t begin=0);
     
             status_t            append(const String16& other);
-            status_t            append(const char16_t* other, size_t len);
+            status_t            append(const uint16_t* other, size_t len);
             
     inline  String16&           operator=(const String16& other);
     
     inline  String16&           operator+=(const String16& other);
     inline  String16            operator+(const String16& other) const;
 
-            status_t            insert(size_t pos, const char16_t* chrs);
+            status_t            insert(size_t pos, const uint16_t* chrs);
             status_t            insert(size_t pos,
-                                       const char16_t* chrs, size_t len);
+                                       const uint16_t* chrs, size_t len);
 
-            ssize_t             findFirst(char16_t c) const;
-            ssize_t             findLast(char16_t c) const;
+            ssize_t             findFirst(uint16_t c) const;
+            ssize_t             findLast(uint16_t c) const;
 
             bool                startsWith(const String16& prefix) const;
-            bool                startsWith(const char16_t* prefix) const;
+            bool                startsWith(const uint16_t* prefix) const;
             
             status_t            makeLower();
 
-            status_t            replaceAll(char16_t replaceThis,
-                                           char16_t withThis);
+            status_t            replaceAll(uint16_t replaceThis,
+                                           uint16_t withThis);
 
             status_t            remove(size_t len, size_t begin=0);
 
@@ -107,17 +107,17 @@ public:
     inline  bool                operator>=(const String16& other) const;
     inline  bool                operator>(const String16& other) const;
     
-    inline  bool                operator<(const char16_t* other) const;
-    inline  bool                operator<=(const char16_t* other) const;
-    inline  bool                operator==(const char16_t* other) const;
-    inline  bool                operator!=(const char16_t* other) const;
-    inline  bool                operator>=(const char16_t* other) const;
-    inline  bool                operator>(const char16_t* other) const;
+    inline  bool                operator<(const uint16_t* other) const;
+    inline  bool                operator<=(const uint16_t* other) const;
+    inline  bool                operator==(const uint16_t* other) const;
+    inline  bool                operator!=(const uint16_t* other) const;
+    inline  bool                operator>=(const uint16_t* other) const;
+    inline  bool                operator>(const uint16_t* other) const;
     
-    inline                      operator const char16_t*() const;
+    inline                      operator const uint16_t*() const;
     
 private:
-            const char16_t*     mString;
+            const uint16_t*     mString;
 };
 
 // String16 can be trivially moved using memcpy() because moving does not
@@ -137,14 +137,14 @@ inline int strictly_order_type(const String16& lhs, const String16& rhs)
     return compare_type(lhs, rhs) < 0;
 }
 
-inline const char16_t* String16::string() const
+inline const uint16_t* String16::string() const
 {
     return mString;
 }
 
 inline size_t String16::size() const
 {
-    return SharedBuffer::sizeFromData(mString)/sizeof(char16_t)-1;
+    return SharedBuffer::sizeFromData(mString)/sizeof(uint16_t)-1;
 }
 
 inline const SharedBuffer* String16::sharedBuffer() const
@@ -206,37 +206,37 @@ inline bool String16::operator>(const String16& other) const
     return strzcmp16(mString, size(), other.mString, other.size()) > 0;
 }
 
-inline bool String16::operator<(const char16_t* other) const
+inline bool String16::operator<(const uint16_t* other) const
 {
     return strcmp16(mString, other) < 0;
 }
 
-inline bool String16::operator<=(const char16_t* other) const
+inline bool String16::operator<=(const uint16_t* other) const
 {
     return strcmp16(mString, other) <= 0;
 }
 
-inline bool String16::operator==(const char16_t* other) const
+inline bool String16::operator==(const uint16_t* other) const
 {
     return strcmp16(mString, other) == 0;
 }
 
-inline bool String16::operator!=(const char16_t* other) const
+inline bool String16::operator!=(const uint16_t* other) const
 {
     return strcmp16(mString, other) != 0;
 }
 
-inline bool String16::operator>=(const char16_t* other) const
+inline bool String16::operator>=(const uint16_t* other) const
 {
     return strcmp16(mString, other) >= 0;
 }
 
-inline bool String16::operator>(const char16_t* other) const
+inline bool String16::operator>(const uint16_t* other) const
 {
     return strcmp16(mString, other) > 0;
 }
 
-inline String16::operator const char16_t*() const
+inline String16::operator const uint16_t*() const
 {
     return mString;
 }

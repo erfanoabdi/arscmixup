@@ -11,7 +11,7 @@
 
 #include "ResChunkHead.h"
 
-typedef uint16_t char16_t;
+typedef uint16_t uint16_t;
 
 /**
  * A collection of resource data types within a package.  Followed by
@@ -27,7 +27,7 @@ struct ResTable_package {
     uint32_t id;
 
     // Actual name of this package, \0-terminated.
-    char16_t name[128];
+    uint16_t name[128];
 
     // Offset to a ResStringPool_header defining the resource
     // type symbol table.  If zero, this package is inheriting from

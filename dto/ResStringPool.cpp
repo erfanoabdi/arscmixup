@@ -101,7 +101,7 @@ status_t ResStringPool::setTo(const void* data, size_t size, bool copyData) {
         if (mHeader->flags & UTF8_FLAG) {
             charSize = sizeof (uint8_t);
         } else {
-            charSize = sizeof (char16_t);
+            charSize = sizeof (uint16_t);
         }
 
         QUP_LOGI("[*] char size = %u", charSize);
@@ -149,8 +149,8 @@ status_t ResStringPool::setTo(const void* data, size_t size, bool copyData) {
                 e[i] = dtohl(mEntries[i]);
             }
             if (!(mHeader->flags & UTF8_FLAG)) {
-                const char16_t* strings = (const char16_t*) mStrings;
-                char16_t* s = const_cast<char16_t*> (strings);
+                const uint16_t* strings = (const uint16_t*) mStrings;
+                uint16_t* s = const_cast<uint16_t*> (strings);
                 for (i = 0; i < mStringPoolSize; i++) {
                     s[i] = dtohs(strings[i]);
                 }
@@ -160,7 +160,7 @@ status_t ResStringPool::setTo(const void* data, size_t size, bool copyData) {
         if ((mHeader->flags & UTF8_FLAG &&
                 ((uint8_t*) mStrings)[mStringPoolSize - 1] != 0) ||
                 (!mHeader->flags & UTF8_FLAG &&
-                ((char16_t*) mStrings)[mStringPoolSize - 1] != 0)) {
+                ((uint16_t*) mStrings)[mStringPoolSize - 1] != 0)) {
             QUP_LOGI("[-] bad string block: last string is not 0-terminated\n");
             return (mError = BAD_TYPE);
         }
@@ -228,11 +228,11 @@ const uint16_t* ResStringPool::stringAt(size_t idx, size_t* u16len) const
 {
     if (mError == NO_ERROR && idx < mHeader->stringCount) {
         const bool isUTF8 = (mHeader->flags&UTF8_FLAG) != 0;
-        const uint32_t off = mEntries[idx]/(isUTF8?sizeof(char):sizeof(char16_t));
+        const uint32_t off = mEntries[idx]/(isUTF8?sizeof(char):sizeof(uint16_t));
         if (off < (mStringPoolSize-1)) {
             if (!isUTF8) {
-                const char16_t* strings = (char16_t*)mStrings;
-                const char16_t* str = strings+off;
+                const uint16_t* strings = (uint16_t*)mStrings;
+                const uint16_t* str = strings+off;
 
                 *u16len = decodeLength16(&str);
                 if ((uint32_t)(str+*u16len-strings) < mStringPoolSize) {
@@ -254,16 +254,16 @@ const uint16_t* ResStringPool::stringAt(size_t idx, size_t* u16len) const
                     if (mCache == NULL) {
 #ifndef HAVE_ANDROID_OS
                         STRING_POOL_NOISY(ALOGI("CREATING STRING CACHE OF %d bytes",
-                                mHeader->stringCount*sizeof(char16_t**)));
+                                mHeader->stringCount*sizeof(uint16_t**)));
 #else
                         // We do not want to be in this case when actually running Android.
                         ALOGW("CREATING STRING CACHE OF %d bytes",
-                                mHeader->stringCount*sizeof(char16_t**));
+                                mHeader->stringCount*sizeof(uint16_t**));
 #endif
-                        mCache = (char16_t**)calloc(mHeader->stringCount, sizeof(char16_t**));
+                        mCache = (uint16_t**)calloc(mHeader->stringCount, sizeof(uint16_t**));
                         if (mCache == NULL) {
                             QUP_LOGI("[-] No memory trying to allocate decode cache table of %d bytes\n",
-                                    (int)(mHeader->stringCount*sizeof(char16_t**)));
+                                    (int)(mHeader->stringCount*sizeof(uint16_t**)));
                             return NULL;
                         }
                     }
@@ -280,7 +280,7 @@ const uint16_t* ResStringPool::stringAt(size_t idx, size_t* u16len) const
                         return NULL;
                     }
 
-                    char16_t *u16str = (char16_t *)calloc(*u16len+1, sizeof(char16_t));
+                    uint16_t *u16str = (uint16_t *)calloc(*u16len+1, sizeof(uint16_t));
                     if (!u16str) {
                         QUP_LOGI("[-] No memory when trying to allocate decode cache for string #%d\n",
                                 (int)idx);

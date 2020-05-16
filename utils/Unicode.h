@@ -22,16 +22,16 @@
 
 extern "C" {
 
-typedef uint32_t char32_t;
-typedef uint16_t char16_t;
+typedef uint32_t uint32_t;
+typedef uint16_t uint16_t;
 
-// Standard string functions on char16_t strings.
-int strcmp16(const char16_t *, const char16_t *);
-int strncmp16(const char16_t *s1, const char16_t *s2, size_t n);
-size_t strlen16(const char16_t *);
-size_t strnlen16(const char16_t *, size_t);
-char16_t *strcpy16(char16_t *, const char16_t *);
-char16_t *strncpy16(char16_t *, const char16_t *, size_t);
+// Standard string functions on uint16_t strings.
+int strcmp16(const uint16_t *, const uint16_t *);
+int strncmp16(const uint16_t *s1, const uint16_t *s2, size_t n);
+size_t strlen16(const uint16_t *);
+size_t strnlen16(const uint16_t *, size_t);
+uint16_t *strcpy16(uint16_t *, const uint16_t *);
+uint16_t *strncpy16(uint16_t *, const uint16_t *, size_t);
 
 // Version of comparison that supports embedded nulls.
 // This is different than strncmp() because we don't stop
@@ -40,20 +40,20 @@ char16_t *strncpy16(char16_t *, const char16_t *, size_t);
 // lengths of both strings).  This can also be used when
 // your string is not nul-terminated as it will have the
 // equivalent result as strcmp16 (unlike strncmp16).
-int strzcmp16(const char16_t *s1, size_t n1, const char16_t *s2, size_t n2);
+int strzcmp16(const uint16_t *s1, size_t n1, const uint16_t *s2, size_t n2);
 
 // Version of strzcmp16 for comparing strings in different endianness.
-int strzcmp16_h_n(const char16_t *s1H, size_t n1, const char16_t *s2N, size_t n2);
+int strzcmp16_h_n(const uint16_t *s1H, size_t n1, const uint16_t *s2N, size_t n2);
 
-// Standard string functions on char32_t strings.
-size_t strlen32(const char32_t *);
-size_t strnlen32(const char32_t *, size_t);
+// Standard string functions on uint32_t strings.
+size_t strlen32(const uint32_t *);
+size_t strnlen32(const uint32_t *, size_t);
 
 /**
  * Measure the length of a UTF-32 string in UTF-8. If the string is invalid
  * such as containing a surrogate character, -1 will be returned.
  */
-ssize_t utf32_to_utf8_length(const char32_t *src, size_t src_len);
+ssize_t utf32_to_utf8_length(const uint32_t *src, size_t src_len);
 
 /**
  * Stores a UTF-8 string converted from "src" in "dst", if "dst_length" is not
@@ -90,12 +90,12 @@ ssize_t utf32_to_utf8_length(const char32_t *src, size_t src_len);
  * "dst" becomes \xE3\x81\x82\xE3\x81\x84
  * (note that "dst" is NOT null-terminated, like strncpy)
  */
-void utf32_to_utf8(const char32_t* src, size_t src_len, char* dst);
+void utf32_to_utf8(const uint32_t* src, size_t src_len, char* dst);
 
 /**
  * Returns the unicode value at "index".
  * Returns -1 when the index is invalid (equals to or more than "src_len").
- * If returned value is positive, it is able to be converted to char32_t, which
+ * If returned value is positive, it is able to be converted to uint32_t, which
  * is unsigned. Then, if "next_index" is not NULL, the next index to be used is
  * stored in "next_index". "next_index" can be NULL.
  */
@@ -105,14 +105,14 @@ int32_t utf32_from_utf8_at(const char *src, size_t src_len, size_t index, size_t
 /**
  * Returns the UTF-8 length of UTF-16 string "src".
  */
-ssize_t utf16_to_utf8_length(const char16_t *src, size_t src_len);
+ssize_t utf16_to_utf8_length(const uint16_t *src, size_t src_len);
 
 /**
  * Converts a UTF-16 string to UTF-8. The destination buffer must be large
  * enough to fit the UTF-16 as measured by utf16_to_utf8_length with an added
  * NULL terminator.
  */
-void utf16_to_utf8(const char16_t* src, size_t src_len, char* dst);
+void utf16_to_utf8(const uint16_t* src, size_t src_len, char* dst);
 
 /**
  * Returns the length of "src" when "src" is valid UTF-8 string.
@@ -142,7 +142,7 @@ size_t utf8_to_utf32_length(const char *src, size_t src_len);
  * enough to store the entire converted string as measured by
  * utf8_to_utf32_length plus space for a NULL terminator.
  */
-void utf8_to_utf32(const char* src, size_t src_len, char32_t* dst);
+void utf8_to_utf32(const char* src, size_t src_len, uint32_t* dst);
 
 /**
  * Returns the UTF-16 length of UTF-8 string "src".
@@ -154,21 +154,21 @@ ssize_t utf8_to_utf16_length(const uint8_t* src, size_t srcLen);
  * Returns a pointer to the end of the string (where a null terminator might go
  * if you wanted to add one).
  */
-char16_t* utf8_to_utf16_no_null_terminator(const uint8_t* src, size_t srcLen, char16_t* dst);
+uint16_t* utf8_to_utf16_no_null_terminator(const uint8_t* src, size_t srcLen, uint16_t* dst);
 
 /**
  * Convert UTF-8 to UTF-16 including surrogate pairs. The destination buffer
  * must be large enough to hold the result as measured by utf8_to_utf16_length
  * plus an added NULL terminator.
  */
-void utf8_to_utf16(const uint8_t* src, size_t srcLen, char16_t* dst);
+void utf8_to_utf16(const uint8_t* src, size_t srcLen, uint16_t* dst);
 
 /**
  * Like utf8_to_utf16_no_null_terminator, but you can supply a maximum length of the
  * decoded string.  The decoded string will fill up to that length; if it is longer
  * the returned pointer will be to the character after dstLen.
  */
-char16_t* utf8_to_utf16_n(const uint8_t* src, size_t srcLen, char16_t* dst, size_t dstLen);
+uint16_t* utf8_to_utf16_n(const uint8_t* src, size_t srcLen, uint16_t* dst, size_t dstLen);
 
 /**
  * Strings in UTF-16 format have length indicated by a length encoded in the
@@ -181,7 +181,7 @@ char16_t* utf8_to_utf16_n(const uint8_t* src, size_t srcLen, char16_t* dst, size
  * add it together with the next character.
  */
 size_t
-decodeLength16(const char16_t** str);
+decodeLength16(const uint16_t** str);
 
 /**
  * Strings in UTF-8 format have length indicated by a length encoded in the

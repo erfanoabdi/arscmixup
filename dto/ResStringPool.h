@@ -28,10 +28,10 @@ public:
 
     // Return string entry as UTF16; if the pool is UTF8, the string will
     // be converted before returning.
-    inline const char16_t* stringAt(const ResStringPool_ref& ref, size_t* outLen) const {
+    inline const uint16_t* stringAt(const ResStringPool_ref& ref, size_t* outLen) const {
         return stringAt(ref.index, outLen);
     }
-    const char16_t* stringAt(size_t idx, size_t* outLen) const;
+    const uint16_t* stringAt(size_t idx, size_t* outLen) const;
 
     // Note: returns null if the string pool is not UTF8.
     const char* string8At(size_t idx, size_t* outLen) const;
@@ -44,7 +44,7 @@ public:
     const ResStringPool_span* styleAt(const ResStringPool_ref& ref) const;
     const ResStringPool_span* styleAt(size_t idx) const;
 
-    ssize_t indexOfString(const char16_t* str, size_t strLen) const;
+    ssize_t indexOfString(const uint16_t* str, size_t strLen) const;
 
     size_t size() const;
     size_t styleCount() const;
@@ -62,7 +62,7 @@ private:
     const uint32_t*             mEntries;           //over ResStringPool_header addr
     const uint32_t*             mEntryStyles;       // = mEntries + mHeader->stringCount
     const void*                 mStrings;          //sometimes = mHeader + mHeader->stringsStart
-    char16_t mutable**          mCache;
+    uint16_t mutable**          mCache;
     uint32_t                    mStringPoolSize;    // number of uint16_t
     const uint32_t*             mStyles;
     uint32_t                    mStylePoolSize;    // number of uint32_t

@@ -341,7 +341,7 @@ void ResTab::print_value(const Package* pkg, const Res_value& value) {
         if (str8 != NULL) {
             printf("(string8) \"%s\"\n", String8::normalizeForOutput(str8).string());
         } else {
-            const char16_t* str16 = pkg->header->values.stringAt(
+            const uint16_t* str16 = pkg->header->values.stringAt(
                     value.data, &len);
             if (str16 != NULL) {
                 printf("(string16) \"%s\"\n",
@@ -427,7 +427,7 @@ void ResTab::printResTab(bool logAll, bool inclValues) {
                                 }
                                 printf("      spec resource 0x%08x %s:%s/%s: flags=0x%08x\n",
                                         resID,
-                                        CHAR16_TO_CSTR(resName.package, resName.packageLen),
+                                        uint16_tO_CSTR(resName.package, resName.packageLen),
                                         type8.string(), name8.string(),
                                         dtohl(typeConfigs->typeSpecFlags[entryIndex]));
                             } else {
@@ -485,7 +485,7 @@ void ResTab::printResTab(bool logAll, bool inclValues) {
                                     name8 = String8(resName.name, resName.nameLen);
                                 }
                                 printf("        resource 0x%08x %s:%s/%s: ", resID,
-                                        CHAR16_TO_CSTR(resName.package, resName.packageLen),
+                                        uint16_tO_CSTR(resName.package, resName.packageLen),
                                         type8.string(), name8.string());
                             } else {
                                 printf("        INVALID RESOURCE 0x%08x: ", resID);
@@ -575,7 +575,7 @@ void ResTab::printResTab(bool logAll, bool inclValues) {
 // produces incorrect results for UTF-16 characters.  For safety's sake, assume that
 // any high-byte UTF-16 code point is not whitespace.
 
-inline int isspace16(char16_t c) {
+inline int isspace16(uint16_t c) {
     return (c < 0x0080 && isspace(c));
 }
 
@@ -630,8 +630,8 @@ status_t ResTab::parsePackage(const ResTable_package * const pkg,
         if (idx == 0) {
             idx = mPackageGroups.size() + 1;
 
-            char16_t tmpName[sizeof (pkg->name) / sizeof (char16_t)];
-            strcpy16_dtoh(tmpName, pkg->name, sizeof (pkg->name) / sizeof (char16_t));
+            uint16_t tmpName[sizeof (pkg->name) / sizeof (uint16_t)];
+            strcpy16_dtoh(tmpName, pkg->name, sizeof (pkg->name) / sizeof (uint16_t));
             group = new PackageGroup(String16(tmpName), id);
             if (group == NULL) {
                 delete package;

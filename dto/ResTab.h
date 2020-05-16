@@ -19,18 +19,18 @@
 #include "ResStringPool.h"
 #include "ResTabPackage.h"
 
-#define CHAR16_TO_CSTR(c16, len) (String8(String16(c16,len)).string())
+#define uint16_tO_CSTR(c16, len) (String8(String16(c16,len)).string())
 
 #define CHAR16_ARRAY_EQ(constant, var, len) \
         ((len == (sizeof(constant)/sizeof(constant[0]))) && (0 == memcmp((var), (constant), (len))))
 
 struct resource_name {
-    const char16_t* package;
+    const uint16_t* package;
     size_t packageLen;
-    const char16_t* type;
+    const uint16_t* type;
     const char* type8;
     size_t typeLen;
-    const char16_t* name;
+    const uint16_t* name;
     const char* name8;
     size_t nameLen;
 };

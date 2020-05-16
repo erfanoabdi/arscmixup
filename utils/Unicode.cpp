@@ -42,18 +42,18 @@
 
 extern "C" {
 
-    static const char32_t kByteMask = 0x000000BF;
-    static const char32_t kByteMark = 0x00000080;
+    static const uint32_t kByteMask = 0x000000BF;
+    static const uint32_t kByteMark = 0x00000080;
 
     // Surrogates aren't valid for UTF-32 characters, so define some
     // constants that will let us screen them out.
-    static const char32_t kUnicodeSurrogateHighStart = 0x0000D800;
-    static const char32_t kUnicodeSurrogateHighEnd = 0x0000DBFF;
-    static const char32_t kUnicodeSurrogateLowStart = 0x0000DC00;
-    static const char32_t kUnicodeSurrogateLowEnd = 0x0000DFFF;
-    static const char32_t kUnicodeSurrogateStart = kUnicodeSurrogateHighStart;
-    static const char32_t kUnicodeSurrogateEnd = kUnicodeSurrogateLowEnd;
-    static const char32_t kUnicodeMaxCodepoint = 0x0010FFFF;
+    static const uint32_t kUnicodeSurrogateHighStart = 0x0000D800;
+    static const uint32_t kUnicodeSurrogateHighEnd = 0x0000DBFF;
+    static const uint32_t kUnicodeSurrogateLowStart = 0x0000DC00;
+    static const uint32_t kUnicodeSurrogateLowEnd = 0x0000DFFF;
+    static const uint32_t kUnicodeSurrogateStart = kUnicodeSurrogateHighStart;
+    static const uint32_t kUnicodeSurrogateEnd = kUnicodeSurrogateLowEnd;
+    static const uint32_t kUnicodeMaxCodepoint = 0x0010FFFF;
 
     // Mask used to set appropriate bits in first byte of UTF-8 sequence,
     // indexed by number of bytes in the sequence.
@@ -65,7 +65,7 @@ extern "C" {
     // -> (e0-ef)(80-bf)(80-bf) 16bit. Bit mask is 0x000000E0
     // 11110yyy 10yyxxxx 10xxxxxx 10xxxxxx
     // -> (f0-f7)(80-bf)(80-bf)(80-bf) 21bit. Bit mask is 0x000000F0
-    static const char32_t kFirstByteMark[] = {
+    static const uint32_t kFirstByteMark[] = {
         0x00000000, 0x00000000, 0x000000C0, 0x000000E0, 0x000000F0
     };
 
@@ -77,7 +77,7 @@ extern "C" {
      * Return number of UTF-8 bytes required for the character. If the character
      * is invalid, return size of 0.
      */
-    static inline size_t utf32_codepoint_utf8_length(char32_t srcChar) {
+    static inline size_t utf32_codepoint_utf8_length(uint32_t srcChar) {
         // Figure out how many bytes the result will require.
         if (srcChar < 0x00000080) {
             return 1;
@@ -101,7 +101,7 @@ extern "C" {
 
     // Write out the source character to <dstP>.
 
-    static inline void utf32_codepoint_to_utf8(uint8_t* dstP, char32_t srcChar, size_t bytes) {
+    static inline void utf32_codepoint_to_utf8(uint8_t* dstP, uint32_t srcChar, size_t bytes) {
         dstP += bytes;
         switch (bytes) { /* note: everything falls through. */
             case 4: *--dstP = (uint8_t) ((srcChar | kByteMark) & kByteMask);
@@ -114,15 +114,15 @@ extern "C" {
         }
     }
 
-    size_t strlen32(const char32_t *s) {
-        const char32_t *ss = s;
+    size_t strlen32(const uint32_t *s) {
+        const uint32_t *ss = s;
         while (*ss)
             ss++;
         return ss - s;
     }
 
-    size_t strnlen32(const char32_t *s, size_t maxlen) {
-        const char32_t *ss = s;
+    size_t strnlen32(const uint32_t *s, size_t maxlen) {
+        const uint32_t *ss = s;
         while ((maxlen > 0) && *ss) {
             ss++;
             maxlen--;
@@ -137,9 +137,9 @@ extern "C" {
             return *cur;
         }
         cur++;
-        char32_t mask, to_ignore_mask;
+        uint32_t mask, to_ignore_mask;
         size_t num_to_read = 0;
-        char32_t utf32 = first_char;
+        uint32_t utf32 = first_char;
         for (num_to_read = 1, mask = 0x40, to_ignore_mask = 0xFFFFFF80;
                 (first_char & mask);
                 num_to_read++, to_ignore_mask |= mask, mask >>= 1) {
@@ -170,26 +170,26 @@ extern "C" {
         return ret;
     }
 
-    ssize_t utf32_to_utf8_length(const char32_t *src, size_t src_len) {
+    ssize_t utf32_to_utf8_length(const uint32_t *src, size_t src_len) {
         if (src == NULL || src_len == 0) {
             return -1;
         }
 
         size_t ret = 0;
-        const char32_t *end = src + src_len;
+        const uint32_t *end = src + src_len;
         while (src < end) {
             ret += utf32_codepoint_utf8_length(*src++);
         }
         return ret;
     }
 
-    void utf32_to_utf8(const char32_t* src, size_t src_len, char* dst) {
+    void utf32_to_utf8(const uint32_t* src, size_t src_len, char* dst) {
         if (src == NULL || src_len == 0 || dst == NULL) {
             return;
         }
 
-        const char32_t *cur_utf32 = src;
-        const char32_t *end_utf32 = src + src_len;
+        const uint32_t *cur_utf32 = src;
+        const uint32_t *end_utf32 = src + src_len;
         char *cur = dst;
         while (cur_utf32 < end_utf32) {
             size_t len = utf32_codepoint_utf8_length(*cur_utf32);
@@ -203,8 +203,8 @@ extern "C" {
     // UTF-16
     // --------------------------------------------------------------------------
 
-    int strcmp16(const char16_t *s1, const char16_t *s2) {
-        char16_t ch;
+    int strcmp16(const uint16_t *s1, const uint16_t *s2) {
+        uint16_t ch;
         int d = 0;
 
         while (1) {
@@ -216,8 +216,8 @@ extern "C" {
         return d;
     }
 
-    int strncmp16(const char16_t *s1, const char16_t *s2, size_t n) {
-        char16_t ch;
+    int strncmp16(const uint16_t *s1, const uint16_t *s2, size_t n) {
+        uint16_t ch;
         int d = 0;
 
         while (n--) {
@@ -229,10 +229,10 @@ extern "C" {
         return d;
     }
 
-    char16_t *strcpy16(char16_t *dst, const char16_t *src) {
-        char16_t *q = dst;
-        const char16_t *p = src;
-        char16_t ch;
+    uint16_t *strcpy16(uint16_t *dst, const uint16_t *src) {
+        uint16_t *q = dst;
+        const uint16_t *p = src;
+        uint16_t ch;
 
         do {
             *q++ = ch = *p++;
@@ -241,16 +241,16 @@ extern "C" {
         return dst;
     }
 
-    size_t strlen16(const char16_t *s) {
-        const char16_t *ss = s;
+    size_t strlen16(const uint16_t *s) {
+        const uint16_t *ss = s;
         while (*ss)
             ss++;
         return ss - s;
     }
 
-    char16_t *strncpy16(char16_t *dst, const char16_t *src, size_t n) {
-        char16_t *q = dst;
-        const char16_t *p = src;
+    uint16_t *strncpy16(uint16_t *dst, const uint16_t *src, size_t n) {
+        uint16_t *q = dst;
+        const uint16_t *p = src;
         char ch;
 
         while (n) {
@@ -265,8 +265,8 @@ extern "C" {
         return dst;
     }
 
-    size_t strnlen16(const char16_t *s, size_t maxlen) {
-        const char16_t *ss = s;
+    size_t strnlen16(const uint16_t *s, size_t maxlen) {
+        const uint16_t *ss = s;
 
         /* Important: the maxlen test must precede the reference through ss;
            since the byte beyond the maximum may segfault */
@@ -277,9 +277,9 @@ extern "C" {
         return ss - s;
     }
 
-    int strzcmp16(const char16_t *s1, size_t n1, const char16_t *s2, size_t n2) {
-        const char16_t* e1 = s1 + n1;
-        const char16_t* e2 = s2 + n2;
+    int strzcmp16(const uint16_t *s1, size_t n1, const uint16_t *s2, size_t n2) {
+        const uint16_t* e1 = s1 + n1;
+        const uint16_t* e2 = s2 + n2;
 
         while (s1 < e1 && s2 < e2) {
             const int d = (int) *s1++ - (int) *s2++;
@@ -295,12 +295,12 @@ extern "C" {
                 : 0);
     }
 
-    int strzcmp16_h_n(const char16_t *s1H, size_t n1, const char16_t *s2N, size_t n2) {
-        const char16_t* e1 = s1H + n1;
-        const char16_t* e2 = s2N + n2;
+    int strzcmp16_h_n(const uint16_t *s1H, size_t n1, const uint16_t *s2N, size_t n2) {
+        const uint16_t* e1 = s1H + n1;
+        const uint16_t* e2 = s2N + n2;
 
         while (s1H < e1 && s2N < e2) {
-            const char16_t c2 = ntohs(*s2N);
+            const uint16_t c2 = ntohs(*s2N);
             const int d = (int) *s1H++ - (int) c2;
             s2N++;
             if (d) {
@@ -315,23 +315,23 @@ extern "C" {
                 : 0);
     }
 
-    void utf16_to_utf8(const char16_t* src, size_t src_len, char* dst) {
+    void utf16_to_utf8(const uint16_t* src, size_t src_len, char* dst) {
         if (src == NULL || src_len == 0 || dst == NULL) {
             return;
         }
 
-        const char16_t* cur_utf16 = src;
-        const char16_t * const end_utf16 = src + src_len;
+        const uint16_t* cur_utf16 = src;
+        const uint16_t * const end_utf16 = src + src_len;
         char *cur = dst;
         while (cur_utf16 < end_utf16) {
-            char32_t utf32;
+            uint32_t utf32;
             // surrogate pairs
             if ((*cur_utf16 & 0xFC00) == 0xD800) {
                 utf32 = (*cur_utf16++ -0xD800) << 10;
                 utf32 |= *cur_utf16++ -0xDC00;
                 utf32 += 0x10000;
             } else {
-                utf32 = (char32_t) * cur_utf16++;
+                utf32 = (uint32_t) * cur_utf16++;
             }
             const size_t len = utf32_codepoint_utf8_length(utf32);
             utf32_codepoint_to_utf8((uint8_t*) cur, utf32, len);
@@ -361,7 +361,7 @@ extern "C" {
 
             int32_t mask, to_ignore_mask;
             size_t num_to_read = 0;
-            char32_t utf32 = 0;
+            uint32_t utf32 = 0;
             for (num_to_read = 1, mask = 0x40, to_ignore_mask = 0x80;
                     num_to_read < 5 && (first_char & mask);
                     num_to_read++, to_ignore_mask |= mask, mask >>= 1) {
@@ -386,13 +386,13 @@ extern "C" {
         return ret;
     }
 
-    ssize_t utf16_to_utf8_length(const char16_t *src, size_t src_len) {
+    ssize_t utf16_to_utf8_length(const uint16_t *src, size_t src_len) {
         if (src == NULL || src_len == 0) {
             return -1;
         }
 
         size_t ret = 0;
-        const char16_t * const end = src + src_len;
+        const uint16_t * const end = src + src_len;
         while (src < end) {
             if ((*src & 0xFC00) == 0xD800 && (src + 1) < end
                     && (*++src & 0xFC00) == 0xDC00) {
@@ -400,7 +400,7 @@ extern "C" {
                 ret += 4;
                 src++;
             } else {
-                ret += utf32_codepoint_utf8_length((char32_t) * src++);
+                ret += utf32_codepoint_utf8_length((uint32_t) * src++);
             }
         }
         return ret;
@@ -448,17 +448,17 @@ extern "C" {
         return ret;
     }
 
-    void utf8_to_utf32(const char* src, size_t src_len, char32_t* dst) {
+    void utf8_to_utf32(const char* src, size_t src_len, uint32_t* dst) {
         if (src == NULL || src_len == 0 || dst == NULL) {
             return;
         }
 
         const char* cur = src;
         const char* const end = src + src_len;
-        char32_t* cur_utf32 = dst;
+        uint32_t* cur_utf32 = dst;
         while (cur < end) {
             size_t num_read;
-            *cur_utf32++ = static_cast<char32_t> (utf32_at_internal(cur, &num_read));
+            *cur_utf32++ = static_cast<uint32_t> (utf32_at_internal(cur, &num_read));
             cur += num_read;
         }
         *cur_utf32 = 0;
@@ -517,10 +517,10 @@ extern "C" {
         return u16measuredLen;
     }
 
-    char16_t* utf8_to_utf16_no_null_terminator(const uint8_t* u8str, size_t u8len, char16_t* u16str) {
+    uint16_t* utf8_to_utf16_no_null_terminator(const uint8_t* u8str, size_t u8len, uint16_t* u16str) {
         const uint8_t * const u8end = u8str + u8len;
         const uint8_t* u8cur = u8str;
-        char16_t* u16cur = u16str;
+        uint16_t* u16cur = u16str;
 
         while (u8cur < u8end) {
             size_t u8len = utf8_codepoint_len(*u8cur);
@@ -529,12 +529,12 @@ extern "C" {
             // Convert the UTF32 codepoint to one or more UTF16 codepoints
             if (codepoint <= 0xFFFF) {
                 // Single UTF16 character
-                *u16cur++ = (char16_t) codepoint;
+                *u16cur++ = (uint16_t) codepoint;
             } else {
                 // Multiple UTF16 characters with surrogates
                 codepoint = codepoint - 0x10000;
-                *u16cur++ = (char16_t) ((codepoint >> 10) + 0xD800);
-                *u16cur++ = (char16_t) ((codepoint & 0x3FF) + 0xDC00);
+                *u16cur++ = (uint16_t) ((codepoint >> 10) + 0xD800);
+                *u16cur++ = (uint16_t) ((codepoint & 0x3FF) + 0xDC00);
             }
 
             u8cur += u8len;
@@ -542,16 +542,16 @@ extern "C" {
         return u16cur;
     }
 
-    void utf8_to_utf16(const uint8_t* u8str, size_t u8len, char16_t* u16str) {
-        char16_t* end = utf8_to_utf16_no_null_terminator(u8str, u8len, u16str);
+    void utf8_to_utf16(const uint8_t* u8str, size_t u8len, uint16_t* u16str) {
+        uint16_t* end = utf8_to_utf16_no_null_terminator(u8str, u8len, u16str);
         *end = 0;
     }
 
-    char16_t* utf8_to_utf16_n(const uint8_t* src, size_t srcLen, char16_t* dst, size_t dstLen) {
+    uint16_t* utf8_to_utf16_n(const uint8_t* src, size_t srcLen, uint16_t* dst, size_t dstLen) {
         const uint8_t * const u8end = src + srcLen;
         const uint8_t* u8cur = src;
         const uint16_t * const u16end = dst + dstLen;
-        char16_t* u16cur = dst;
+        uint16_t* u16cur = dst;
 
         while (u8cur < u8end && u16cur < u16end) {
             size_t u8len = utf8_codepoint_len(*u8cur);
@@ -560,16 +560,16 @@ extern "C" {
             // Convert the UTF32 codepoint to one or more UTF16 codepoints
             if (codepoint <= 0xFFFF) {
                 // Single UTF16 character
-                *u16cur++ = (char16_t) codepoint;
+                *u16cur++ = (uint16_t) codepoint;
             } else {
                 // Multiple UTF16 characters with surrogates
                 codepoint = codepoint - 0x10000;
-                *u16cur++ = (char16_t) ((codepoint >> 10) + 0xD800);
+                *u16cur++ = (uint16_t) ((codepoint >> 10) + 0xD800);
                 if (u16cur >= u16end) {
                     // Ooops...  not enough room for this surrogate pair.
                     return u16cur - 1;
                 }
-                *u16cur++ = (char16_t) ((codepoint & 0x3FF) + 0xDC00);
+                *u16cur++ = (uint16_t) ((codepoint & 0x3FF) + 0xDC00);
             }
 
             u8cur += u8len;
@@ -578,7 +578,7 @@ extern "C" {
     }
 
     size_t
-    decodeLength16(const char16_t** str) {
+    decodeLength16(const uint16_t** str) {
         size_t len = **str;
         if ((len & 0x8000) != 0) {
             (*str)++;
@@ -602,7 +602,7 @@ extern "C" {
     void strcpy16_dtoh(uint16_t* dst, const uint16_t* src, size_t avail) {
         uint16_t* last = dst + avail - 1;
         while (*src && (dst < last)) {
-            char16_t s = dtohs(*src);
+            uint16_t s = dtohs(*src);
             *dst++ = s;
             src++;
         }

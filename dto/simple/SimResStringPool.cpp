@@ -51,7 +51,7 @@ bool SimResStringPool::makeResStringPool() {
     if (mStringPoolHeader->flags & UTF8_FLAG) {
         charSize = sizeof (uint8_t);
     } else {
-        charSize = sizeof (char16_t);
+        charSize = sizeof (uint16_t);
     }
 
     QUP_LOGI("[*] char size = %u", charSize);
@@ -73,7 +73,7 @@ bool SimResStringPool::makeResStringPool() {
     if ((mStringPoolHeader->flags & UTF8_FLAG &&
             ((uint8_t*) mStrings)[mStringPoolSize - 1] != 0) ||
             (!mStringPoolHeader->flags & UTF8_FLAG &&
-            ((char16_t*) mStrings)[mStringPoolSize - 1] != 0)) {
+            ((uint16_t*) mStrings)[mStringPoolSize - 1] != 0)) {
         QUP_LOGI("[-] bad string block: last string is not 0-terminated\n");
         return false;
     }
@@ -107,7 +107,7 @@ bool SimResStringPool::makeResStringPool() {
 const u1* SimResStringPool::getStringByEntryIndex(u4 index) {
     if (index < mStringCount) {
         const bool isUTF8 = (mStringPoolHeader->flags & UTF8_FLAG) != 0;
-        const u4 off = mStringEntries[index] / (isUTF8 ? sizeof (char) : sizeof (char16_t));
+        const u4 off = mStringEntries[index] / (isUTF8 ? sizeof (char) : sizeof (uint16_t));
         QUP_LOGI("[*] is utf8 = %d, off = %d", isUTF8, off);
         if (off < (mStringPoolSize - 1)) {
             const u1* strings = (u1*) mStrings;
@@ -121,7 +121,7 @@ const u1* SimResStringPool::getStringByEntryIndex(u4 index) {
 const u1 * SimResStringPool::getStyleByEntryIndex(u4 index) {
     if (index < mStyleCount) {
         const bool isUTF8 = (mStringPoolHeader->flags & UTF8_FLAG) != 0;
-        const u4 off = mStyleEntries[index] / (isUTF8 ? sizeof (char) : sizeof (char16_t));
+        const u4 off = mStyleEntries[index] / (isUTF8 ? sizeof (char) : sizeof (uint16_t));
         QUP_LOGI("[*] is utf8 = %d, off = %d", isUTF8, off);
         if (off < (mStylePoolSize - 1)) {
             const u1* strings = (u1*) mStyles;

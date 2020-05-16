@@ -51,10 +51,10 @@ public:
     explicit                    String8(const char* o, size_t numChars);
     
     explicit                    String8(const String16& o);
-    explicit                    String8(const char16_t* o);
-    explicit                    String8(const char16_t* o, size_t numChars);
-    explicit                    String8(const char32_t* o);
-    explicit                    String8(const char32_t* o, size_t numChars);
+    explicit                    String8(const uint16_t* o);
+    explicit                    String8(const uint16_t* o, size_t numChars);
+    explicit                    String8(const uint32_t* o);
+    explicit                    String8(const uint32_t* o, size_t numChars);
                                 ~String8();
 
     static inline const String8 empty();
@@ -75,8 +75,8 @@ public:
             void                setTo(const String8& other);
             status_t            setTo(const char* other);
             status_t            setTo(const char* other, size_t numChars);
-            status_t            setTo(const char16_t* other, size_t numChars);
-            status_t            setTo(const char32_t* other,
+            status_t            setTo(const uint16_t* other, size_t numChars);
+            status_t            setTo(const uint32_t* other,
                                       size_t length);
 
             status_t            append(const String8& other);
@@ -92,7 +92,7 @@ public:
             size_t              getUtf32Length() const;
             int32_t             getUtf32At(size_t index,
                                            size_t *next_index) const;
-            void                getUtf32(char32_t* dst) const;
+            void                getUtf32(uint32_t* dst) const;
 
     inline  String8&            operator=(const String8& other);
     inline  String8&            operator=(const char* other);

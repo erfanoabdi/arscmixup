@@ -28,16 +28,16 @@
 #include <stdlib.h>
 
     static SharedBuffer* gEmptyStringBuf = NULL;
-    static char16_t* gEmptyString = NULL;
+    static uint16_t* gEmptyString = NULL;
 
-    static inline char16_t* getEmptyString() {
+    static inline uint16_t* getEmptyString() {
         gEmptyStringBuf->acquire();
         return gEmptyString;
     }
 
     void initialize_string16() {
-        SharedBuffer* buf = SharedBuffer::alloc(sizeof (char16_t));
-        char16_t* str = (char16_t*) buf->data();
+        SharedBuffer* buf = SharedBuffer::alloc(sizeof (uint16_t));
+        uint16_t* str = (uint16_t*) buf->data();
         *str = 0;
         gEmptyStringBuf = buf;
         gEmptyString = str;
@@ -51,7 +51,7 @@
 
     // ---------------------------------------------------------------------------
 
-    static char16_t* allocFromUTF8(const char* u8str, size_t u8len) {
+    static uint16_t* allocFromUTF8(const char* u8str, size_t u8len) {
         if (u8len == 0) return getEmptyString();
 
         const uint8_t* u8cur = (const uint8_t*) u8str;
@@ -63,10 +63,10 @@
 
         const uint8_t * const u8end = u8cur + u8len;
 
-        SharedBuffer* buf = SharedBuffer::alloc(sizeof (char16_t)*(u16len + 1));
+        SharedBuffer* buf = SharedBuffer::alloc(sizeof (uint16_t)*(u16len + 1));
         if (buf) {
             u8cur = (const uint8_t*) u8str;
-            char16_t* u16str = (char16_t*) buf->data();
+            uint16_t* u16str = (uint16_t*) buf->data();
 
             utf8_to_utf16(u8cur, u8len, u16str);
 
@@ -92,8 +92,8 @@
         // having run. In this case we always allocate an empty string. It's less
         // efficient than using getEmptyString(), but we assume it's uncommon.
 
-        char16_t* data = static_cast<char16_t*> (
-                SharedBuffer::alloc(sizeof (char16_t))->data());
+        uint16_t* data = static_cast<uint16_t*> (
+                SharedBuffer::alloc(sizeof (uint16_t))->data());
         data[0] = 0;
         mString = data;
     }
@@ -108,15 +108,15 @@
         setTo(o, len, begin);
     }
 
-    String16::String16(const char16_t* o) {
+    String16::String16(const uint16_t* o) {
         size_t len = strlen16(o);
-        SharedBuffer* buf = SharedBuffer::alloc((len + 1) * sizeof (char16_t));
+        SharedBuffer* buf = SharedBuffer::alloc((len + 1) * sizeof (uint16_t));
         if (!buf) {
             QUP_LOGI("Unable to allocate shared buffer");
             abort();
         }
         if (buf) {
-            char16_t* str = (char16_t*) buf->data();
+            uint16_t* str = (uint16_t*) buf->data();
             strcpy16(str, o);
             mString = str;
             return;
@@ -125,15 +125,15 @@
         mString = getEmptyString();
     }
 
-    String16::String16(const char16_t* o, size_t len) {
-        SharedBuffer* buf = SharedBuffer::alloc((len + 1) * sizeof (char16_t));
+    String16::String16(const uint16_t* o, size_t len) {
+        SharedBuffer* buf = SharedBuffer::alloc((len + 1) * sizeof (uint16_t));
         if (!buf) {
             QUP_LOGI("Unable to allocate shared buffer");
             abort();
         }
         if (buf) {
-            char16_t* str = (char16_t*) buf->data();
-            memcpy(str, o, len * sizeof (char16_t));
+            uint16_t* str = (uint16_t*) buf->data();
+            memcpy(str, o, len * sizeof (uint16_t));
             str[len] = 0;
             mString = str;
             return;
@@ -185,16 +185,16 @@
         return setTo(other.string() + begin, len);
     }
 
-    status_t String16::setTo(const char16_t* other) {
+    status_t String16::setTo(const uint16_t* other) {
         return setTo(other, strlen16(other));
     }
 
-    status_t String16::setTo(const char16_t* other, size_t len) {
+    status_t String16::setTo(const uint16_t* other, size_t len) {
         SharedBuffer* buf = SharedBuffer::bufferFromData(mString)
-                ->editResize((len + 1) * sizeof (char16_t));
+                ->editResize((len + 1) * sizeof (uint16_t));
         if (buf) {
-            char16_t* str = (char16_t*) buf->data();
-            memmove(str, other, len * sizeof (char16_t));
+            uint16_t* str = (uint16_t*) buf->data();
+            memmove(str, other, len * sizeof (uint16_t));
             str[len] = 0;
             mString = str;
             return NO_ERROR;
@@ -213,17 +213,17 @@
         }
 
         SharedBuffer* buf = SharedBuffer::bufferFromData(mString)
-                ->editResize((myLen + otherLen + 1) * sizeof (char16_t));
+                ->editResize((myLen + otherLen + 1) * sizeof (uint16_t));
         if (buf) {
-            char16_t* str = (char16_t*) buf->data();
-            memcpy(str + myLen, other, (otherLen + 1) * sizeof (char16_t));
+            uint16_t* str = (uint16_t*) buf->data();
+            memcpy(str + myLen, other, (otherLen + 1) * sizeof (uint16_t));
             mString = str;
             return NO_ERROR;
         }
         return NO_MEMORY;
     }
 
-    status_t String16::append(const char16_t* chrs, size_t otherLen) {
+    status_t String16::append(const uint16_t* chrs, size_t otherLen) {
         const size_t myLen = size();
         if (myLen == 0) {
             setTo(chrs, otherLen);
@@ -233,10 +233,10 @@
         }
 
         SharedBuffer* buf = SharedBuffer::bufferFromData(mString)
-                ->editResize((myLen + otherLen + 1) * sizeof (char16_t));
+                ->editResize((myLen + otherLen + 1) * sizeof (uint16_t));
         if (buf) {
-            char16_t* str = (char16_t*) buf->data();
-            memcpy(str + myLen, chrs, otherLen * sizeof (char16_t));
+            uint16_t* str = (uint16_t*) buf->data();
+            memcpy(str + myLen, chrs, otherLen * sizeof (uint16_t));
             str[myLen + otherLen] = 0;
             mString = str;
             return NO_ERROR;
@@ -244,11 +244,11 @@
         return NO_MEMORY;
     }
 
-    status_t String16::insert(size_t pos, const char16_t* chrs) {
+    status_t String16::insert(size_t pos, const uint16_t* chrs) {
         return insert(pos, chrs, strlen16(chrs));
     }
 
-    status_t String16::insert(size_t pos, const char16_t* chrs, size_t len) {
+    status_t String16::insert(size_t pos, const uint16_t* chrs, size_t len) {
         const size_t myLen = size();
         if (myLen == 0) {
             return setTo(chrs, len);
@@ -266,13 +266,13 @@
 #endif
 
         SharedBuffer* buf = SharedBuffer::bufferFromData(mString)
-                ->editResize((myLen + len + 1) * sizeof (char16_t));
+                ->editResize((myLen + len + 1) * sizeof (uint16_t));
         if (buf) {
-            char16_t* str = (char16_t*) buf->data();
+            uint16_t* str = (uint16_t*) buf->data();
             if (pos < myLen) {
-                memmove(str + pos + len, str + pos, (myLen - pos) * sizeof (char16_t));
+                memmove(str + pos + len, str + pos, (myLen - pos) * sizeof (uint16_t));
             }
-            memcpy(str + pos, chrs, len * sizeof (char16_t));
+            memcpy(str + pos, chrs, len * sizeof (uint16_t));
             str[myLen + len] = 0;
             mString = str;
 #if 0
@@ -283,10 +283,10 @@
         return NO_MEMORY;
     }
 
-    ssize_t String16::findFirst(char16_t c) const {
-        const char16_t* str = string();
-        const char16_t* p = str;
-        const char16_t* e = p + size();
+    ssize_t String16::findFirst(uint16_t c) const {
+        const uint16_t* str = string();
+        const uint16_t* p = str;
+        const uint16_t* e = p + size();
         while (p < e) {
             if (*p == c) {
                 return p - str;
@@ -296,10 +296,10 @@
         return -1;
     }
 
-    ssize_t String16::findLast(char16_t c) const {
-        const char16_t* str = string();
-        const char16_t* p = str;
-        const char16_t* e = p + size();
+    ssize_t String16::findLast(uint16_t c) const {
+        const uint16_t* str = string();
+        const uint16_t* p = str;
+        const uint16_t* e = p + size();
         while (p < e) {
             e--;
             if (*e == c) {
@@ -315,7 +315,7 @@
         return strzcmp16(mString, ps, prefix.string(), ps) == 0;
     }
 
-    bool String16::startsWith(const char16_t* prefix) const {
+    bool String16::startsWith(const uint16_t* prefix) const {
         const size_t ps = strlen16(prefix);
         if (ps > size()) return false;
         return strncmp16(mString, prefix, ps) == 0;
@@ -323,17 +323,17 @@
 
     status_t String16::makeLower() {
         const size_t N = size();
-        const char16_t* str = string();
-        char16_t* edit = NULL;
+        const uint16_t* str = string();
+        uint16_t* edit = NULL;
         for (size_t i = 0; i < N; i++) {
-            const char16_t v = str[i];
+            const uint16_t v = str[i];
             if (v >= 'A' && v <= 'Z') {
                 if (!edit) {
                     SharedBuffer* buf = SharedBuffer::bufferFromData(mString)->edit();
                     if (!buf) {
                         return NO_MEMORY;
                     }
-                    edit = (char16_t*) buf->data();
+                    edit = (uint16_t*) buf->data();
                     mString = str = edit;
                 }
                 edit[i] = tolower((char) v);
@@ -342,10 +342,10 @@
         return NO_ERROR;
     }
 
-    status_t String16::replaceAll(char16_t replaceThis, char16_t withThis) {
+    status_t String16::replaceAll(uint16_t replaceThis, uint16_t withThis) {
         const size_t N = size();
-        const char16_t* str = string();
-        char16_t* edit = NULL;
+        const uint16_t* str = string();
+        uint16_t* edit = NULL;
         for (size_t i = 0; i < N; i++) {
             if (str[i] == replaceThis) {
                 if (!edit) {
@@ -353,7 +353,7 @@
                     if (!buf) {
                         return NO_MEMORY;
                     }
-                    edit = (char16_t*) buf->data();
+                    edit = (uint16_t*) buf->data();
                     mString = str = edit;
                 }
                 edit[i] = withThis;
@@ -376,18 +376,18 @@
 
         if (begin > 0) {
             SharedBuffer* buf = SharedBuffer::bufferFromData(mString)
-                    ->editResize((N + 1) * sizeof (char16_t));
+                    ->editResize((N + 1) * sizeof (uint16_t));
             if (!buf) {
                 return NO_MEMORY;
             }
-            char16_t* str = (char16_t*) buf->data();
-            memmove(str, str + begin, (N - begin + 1) * sizeof (char16_t));
+            uint16_t* str = (uint16_t*) buf->data();
+            memmove(str, str + begin, (N - begin + 1) * sizeof (uint16_t));
             mString = str;
         }
         SharedBuffer* buf = SharedBuffer::bufferFromData(mString)
-                ->editResize((len + 1) * sizeof (char16_t));
+                ->editResize((len + 1) * sizeof (uint16_t));
         if (buf) {
-            char16_t* str = (char16_t*) buf->data();
+            uint16_t* str = (uint16_t*) buf->data();
             str[len] = 0;
             mString = str;
             return NO_ERROR;

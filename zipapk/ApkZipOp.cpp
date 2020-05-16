@@ -1,7 +1,7 @@
-/* 
+/*
  * File:   ApkZipOp.cpp
  * Author: angeltoms
- * 
+ *
  */
 
 #include "ApkZipOp.h"
@@ -13,7 +13,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/types.h>
-#include <error.h>
+//#include <error.h>
 #include <errno.h>
 #include <string.h>
 #include <stdio.h>
@@ -300,6 +300,3 @@ bool ApkZipOp::addApkMixupRes(std::map<ResMaps*, ResMaps*>& maps) {
 
     return true;
 }
-
-
-

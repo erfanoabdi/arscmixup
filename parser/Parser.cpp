@@ -1,7 +1,7 @@
-/* 
+/*
  * File:   Parser.cpp
  * Author : angelToms
- * 
+ *
  */
 
 #include "Parser.h"
@@ -10,7 +10,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/types.h>
-#include <error.h>
+//#include <error.h>
 #include <errno.h>
 #include <string.h>
 
@@ -53,7 +53,7 @@ bool Parser::loadDataFromFile() {
 
     mSize = stbuf.st_size;
     size_t bufsize = mSize;
-    
+
 #if 0
     bufsize = mSize + (mSize / 1000) + 1;
 #endif
@@ -76,4 +76,3 @@ bool Parser::loadDataFromFile() {
 
     return true;
 }
-

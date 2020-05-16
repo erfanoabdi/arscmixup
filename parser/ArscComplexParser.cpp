@@ -1,7 +1,7 @@
-/* 
+/*
  * File:   ArscComplexParser.cpp
  * Author: angel-toms
- * 
+ *
  */
 
 #include "ArscComplexParser.h"
@@ -17,7 +17,7 @@
 #include <ctype.h>
 #include <stdint.h>
 #include <assert.h>
-#include <errors.h>
+//#include <errors.h>
 
 ArscComplexParser::ArscComplexParser(const std::string filePath, ParseType type, bool copyData)
 : Parser(filePath, type, copyData),
@@ -37,17 +37,15 @@ bool ArscComplexParser::parser() {
         QUP_LOGI("[-] alloc res table fail");
         return false;
     }
-    
+
     if(!mResTab->makeResTab()) {
         QUP_LOGI("[-] make res table fail");
         return false;
     }
-    
+
     return true;
 }
 
 void ArscComplexParser::print(bool logAll, bool inclValues) {
     mResTab->printResTab(logAll, inclValues);
 }
-
-

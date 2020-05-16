@@ -46,8 +46,8 @@ bool SimResPackage::makeResPackage() {
     u1* dataEnd = mData + mHeader->header.size;
 
     mResPackage = (ResTable_package*) p;
-    char16_t tmpName[sizeof (mResPackage->name) / sizeof (char16_t)];
-    strcpy16_dtoh(tmpName, mResPackage->name, sizeof (mResPackage->name) / sizeof (char16_t));
+    uint16_t tmpName[sizeof (mResPackage->name) / sizeof (uint16_t)];
+    strcpy16_dtoh(tmpName, mResPackage->name, sizeof (mResPackage->name) / sizeof (uint16_t));
     const char* name = String8(String16(tmpName)).string();
     mPkgName = std::string(name);
     printResTablePackage(mResPackage, name);
