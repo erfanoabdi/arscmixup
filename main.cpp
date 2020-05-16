@@ -141,15 +141,6 @@ static void useBinParse(std::string apkpath) {
         exit(-1);
     }
 
-    QUP_LOGI("[*] iter remove %s ", basedir);
-    //iter remove unzip file
-    if (!iter_del_dir(basedir, 0)) {
-        QUP_LOGI("[-] iter remove %s fail", basedir);
-        exit(-1);
-    }
-
-    rmdir(basedir);
-
     delete mixer;
     mixer = NULL;
 }
