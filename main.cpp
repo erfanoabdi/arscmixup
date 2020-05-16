@@ -18,7 +18,7 @@
 #include "Common.h"
 #include "QupLog.h"
 
-//#define ONLY_PARSE_NOT_MIXUP
+#define ONLY_PARSE_NOT_MIXUP
 
 static void usage() {
     QUP_LOGI("Usage :\n"
